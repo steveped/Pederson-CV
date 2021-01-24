@@ -1,0 +1,368 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2015 Xavier Danaux (xdanaux@gmail.com).
+%
+% Adapted to be an Rmarkdown template by Mitchell O'Hara-Wild
+% 8 February 2019
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[11pt,a4paper,]{moderncv}
+
+% moderncv themes
+\moderncvstyle{classic}                             % style options are 'casual' (default), 'classic', 'banking', 'oldstyle' and 'fancy'
+
+\definecolor{color0}{rgb}{0,0,0}% black
+\definecolor{color1}{HTML}{3873B3}% custom
+\definecolor{color2}{rgb}{0.45,0.45,0.45}% dark grey
+
+\usepackage[scaled=0.86]{DejaVuSansMono}
+
+\providecommand{\tightlist}{%
+	\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\def\donothing#1{#1}
+\def\emaillink#1{#1}
+
+%\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+%\usepackage[utf8]{inputenc}                       % if you are not using xelatex ou lualatex, replace by the encoding you are using
+%\usepackage{CJKutf8}                              % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.75,footskip=60pt]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvheadnamewidth}{10cm}            % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+
+
+
+% personal data
+\name{Stephen M}{Pederson}
+\title{Post-Doctoral Bioinformatician}
+\address{Dame Roma Mitchell Cancer Research Laboratories\\
+Adelaide Medical School\\
+University of Adelaide\\}{}{}
+\phone[mobile]{+61 4 1333 9618} % Phone number
+\email{\donothing{\href{mailto:stephen.pederson@adelaide.edu.au}{\nolinkurl{stephen.pederson@adelaide.edu.au}}}}
+\homepage{researchers.adelaide.edu.au/profile/stephen.pederson} % Personal website
+\social[linkedin]{stephen-pederson-06ba4914}
+
+\social[github]{steveped}
+% \extrainfo{additional information}                 % optional, remove / comment the line if not wanted
+
+
+
+
+% Pandoc CSL macros
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[3] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+  % set entry spacing
+  \ifnum #2 > 0
+  \setlength{\parskip}{#2\baselineskip}
+  \fi
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%\begin{CJK*}{UTF8}{gbsn}                          % to typeset your resume in Chinese using CJK
+%-----       resume       ---------------------------------------------------------
+\makecvtitle
+
+
+
+\renewcommand*{\cventry}[7][-3mm]{%
+  \cvitem[#1]{#2}{%
+    {\bfseries#3}%
+    \ifthenelse{\equal{#4}{}}{}{, {\slshape#4}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small#7\end{minipage}}\fi}}
+
+\hypertarget{profile}{%
+\section{Profile}\label{profile}}
+
+\begin{itemize}
+\tightlist
+\item
+  Whilst training in the context of the immune dysregulation of T cells,
+  a keen interest of mine is \emph{Transcriptomics and Gene Regulatory
+  Networks}. As part of my PhD (2018), I developed a novel, Bayesian
+  statistical methodology for the analysis of Whole Transcript
+  Microarray data, focussing on the detection of alternate isoform
+  usage. As a consequence, a potential role for ncRNA in the activation
+  of T cells was revealed for the first time.
+\item
+  As the inaugural co-ordinator of the Bioinformatics Hub at the
+  University of Adelaide (2014-2020), \emph{I oversaw the growth of this
+  facility from a sole employee in 2014 to 4.0FTE staff in core
+  positions by 2020}, along with a further 12 contract and casual staff.
+\item
+  Bioinformatics education and training have always been an important
+  interest. Locally \emph{I have delivered bioinformatics training
+  workshops to over 1500 staff and students}, as well as delivering
+  training workshops at national training events. From the years
+  2016-2018, I ran the \emph{largest training event in the language
+  \texttt{R} held in Australia}, attracting attendees from around
+  Australia. I have also run corporate R training for both Sugar
+  Research Australia (QLD) and SARDI
+\item
+  I played an active role in the \emph{establishment of an Undergraduate
+  Major in Bioinformatics} (B.Sc), acting as Course Convenor for
+  Transcriptomics Applications III in 2020, writing and delivering
+  nearly all lecture and practical material.
+\item
+  I am an enthusiastic supporter of open source software and am the
+  senior author/developer of \emph{two Bioconductor packages}. From
+  2016-2019, I played an active role in establishing the international
+  event BiocAsia, bringing the training and networking opportunities of
+  the Bioconductor community to our local region.
+\item
+  Prior to bioinformatics, I was a professional musician and remain
+  active in the local arts community, having performed at WOMADelaide
+  four times
+\end{itemize}
+
+\small
+
+\hypertarget{employment-history}{%
+\section{Employment History}\label{employment-history}}
+
+\nopagebreak
+    %
+  \cvitem[-3mm]{2020-}{%
+    {\bfseries Post-Doctoral Bioinformatician}%
+    \ifthenelse{\equal{Dame Roma Mitchell Cancer Research Laboratories, Univerrsity of Adelaide}{}}{}{, {\slshape Dame Roma Mitchell Cancer Research Laboratories, Univerrsity of Adelaide}}%
+    \ifthenelse{\equal{Adelaide, South Australia}{}}{}{, Adelaide, South Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2014-2020}{%
+    {\bfseries Co-ordinator}%
+    \ifthenelse{\equal{Bioinformatics Hub, University of Adelaide}{}}{}{, {\slshape Bioinformatics Hub, University of Adelaide}}%
+    \ifthenelse{\equal{Adelaide, South Australia}{}}{}{, Adelaide, South Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2011-2014}{%
+    {\bfseries Casual Tutor}%
+    \ifthenelse{\equal{School of Mathematical Sciences, University of Adelaide}{}}{}{, {\slshape School of Mathematical Sciences, University of Adelaide}}%
+    \ifthenelse{\equal{Adelaide, South Australia}{}}{}{, Adelaide, South Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{1992-2008}{%
+    {\bfseries Self-Employed Musician}%
+    \ifthenelse{\equal{}{}}{}{, {\slshape}}%
+    \ifthenelse{\equal{Adelaide, South Australia}{}}{}{, Adelaide, South Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+
+\hypertarget{education}{%
+\section{Education}\label{education}}
+
+\nopagebreak
+    %
+  \cvitem[-3mm]{2008-2018}{%
+    {\bfseries Doctor of Philosophy (Medicine)}%
+    \ifthenelse{\equal{University of Adelaide}{}}{}{, {\slshape University of Adelaide}}%
+    \ifthenelse{\equal{South Australia, Australia}{}}{}{, South Australia, Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2006-2007}{%
+    {\bfseries Bachelor of Mathematics \& Comp. Sc. (Hons)}%
+    \ifthenelse{\equal{University of Adelaide}{}}{}{, {\slshape University of Adelaide}}%
+    \ifthenelse{\equal{South Australia, Australia}{}}{}{, South Australia, Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2002-2005}{%
+    {\bfseries Bachelor of Science}%
+    \ifthenelse{\equal{University of Adelaide}{}}{}{, {\slshape University of Adelaide}}%
+    \ifthenelse{\equal{South Australia, Australia}{}}{}{, South Australia, Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{1989-1991}{%
+    {\bfseries Bachelor of Music}%
+    \ifthenelse{\equal{University of Adelaide}{}}{}{, {\slshape University of Adelaide}}%
+    \ifthenelse{\equal{South Australia, Australia}{}}{}{, South Australia, Australia}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+
+\hypertarget{presentations}{%
+\section{Presentations}\label{presentations}}
+
+\nopagebreak
+    %
+  \cvitem[-3mm]{2019}{%
+    {\bfseries Bioconductor}%
+    \ifthenelse{\equal{New York, NY}{}}{}{, {\slshape New York, NY}}%
+    \ifthenelse{\equal{Short Talk \& Poster - ngsReports and strandCheckR: Two new packages for quality control of NGS data}{}}{}{, Short Talk \& Poster - ngsReports and strandCheckR: Two new packages for quality control of NGS data}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2019}{%
+    {\bfseries BiocAsia/BioinfoSummer}%
+    \ifthenelse{\equal{Sydney}{}}{}{, {\slshape Sydney}}%
+    \ifthenelse{\equal{Short Talk - Experiences of a First-Time Package Submitter}{}}{}{, Short Talk - Experiences of a First-Time Package Submitter}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2017}{%
+    {\bfseries BioinfoSummer}%
+    \ifthenelse{\equal{Adelaide}{}}{}{, {\slshape Adelaide}}%
+    \ifthenelse{\equal{Training Workshop - Data Visualisation in R}{}}{}{, Training Workshop - Data Visualisation in R}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2016}{%
+    {\bfseries ABACBS}%
+    \ifthenelse{\equal{Brisbane}{}}{}{, {\slshape Brisbane}}%
+    \ifthenelse{\equal{Poster - Use of a weighted bootstrap for indentifying the regulatory role of genomic repeat elements}{}}{}{, Poster - Use of a weighted bootstrap for indentifying the regulatory role of genomic repeat elements}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2015}{%
+    {\bfseries NCBI}%
+    \ifthenelse{\equal{Bethesda, MD}{}}{}{, {\slshape Bethesda, MD}}%
+    \ifthenelse{\equal{Presentation - Bioinformatics from Down Under}{}}{}{, Presentation - Bioinformatics from Down Under}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+    %
+  \cvitem[-3mm]{2015}{%
+    {\bfseries BioinfoSummer}%
+    \ifthenelse{\equal{Sydney}{}}{}{, {\slshape Sydney}}%
+    \ifthenelse{\equal{Training Workshop - Introduction to R}{}}{}{, Training Workshop - Introduction to R}%
+    \ifthenelse{\equal{}{}}{}{, }%
+    .\strut%
+    \ifx&\empty&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small\empty\end{minipage}}\fi}
+
+\hypertarget{community-engagement}{%
+\section{Community Engagement}\label{community-engagement}}
+
+\nopagebreak
+    \cvitem{2018-2021}{Ordinary Member. Australian Bioinformatics And Computational Biology Society}
+    \cvitem{2016-2019}{BiocAsia Conference Committee. Bioconductor}
+    \cvitem{2017}{Conference Committee. Australian Bioinformatics And Computational Biology Society}
+    \cvitem{2016}{BioinfoSummer Conference Committee. Australian Mathematical Sciences Institute}
+    \cvitem{2014-2016}{Ordinary Member. Australasian Genomics Technologies Association}
+    \cvitem{2014-2015}{Ordinary Member. International Society for Computational Biology}
+
+\hypertarget{technical-skills}{%
+\section{Technical Skills}\label{technical-skills}}
+
+\begin{itemize}
+\tightlist
+\item
+  Highly fluent in the language \texttt{R} and using High-Performance
+  Computing systems, along with \texttt{snakemake} for pipeline
+  management
+\item
+  Experienced with \texttt{linux} (Ubuntu), \texttt{bash}, \texttt{Git}
+  for version control, \texttt{markdown} and \LaTeX
+\item
+  A working familiarity with \texttt{python} and \texttt{C/C++}
+\item
+  Expertise in RNA-Seq, scRNA-Seq, ChIP-Seq, RAD/GBS-Seq, HiC-Seq and
+  microarray data
+\end{itemize}
+
+\hypertarget{publications-since-2018}{%
+\section{Publications Since 2018}\label{publications-since-2018}}
+
+\begin{enumerate}
+  \small
+     \item CM Ward, TH To, \textbf{SM Pederson} (2020) \emph{ngsReports: a Bioconductor package for managing FastQC reports and other NGS related log files} \textbf{Bioinformatics} 36 (8), 2587-2588 \\[-3mm] 
+     \item N Hin, M Newman, J Kaslin, AM Douek, A Lumsden, SH M Nik, Y Dong, Xin-F Zhou, NB Manucat-Tan, A Ludington, DL Adelson, \textbf{SM Pederson}, M Lardelli (2020) \emph{Accelerated brain aging towards transcriptional inversion in a zebrafish model of the K115fs mutation of human PSEN2} \textbf{PLOS One} 15 (1), e0227258 \\[-3mm] 
+     \item CE Whyte, M Osman, EE Kara, C Abbott, J Foeng, DR McKenzie, KA Fenix, Y Harata-Lee, KL Foyle, ST Boyle, M Kochetkova, AR Aguilera, J Hou, Xian-Y Li, MA Armstrong, \textbf{SM Pederson}, I Comerford, MJ Smyth, SR McColl (2020) \emph{ACKR4 restrains antitumor immunity by regulating CCL21} \textbf{Journal Of Experimental Medicine} 217 (6) \\[-3mm] 
+     \item G Singhal, J Morgan, MC Jawahar, F Corrigan, EJ Jaehne, C Toben, J Breen, \textbf{SM Pederson}, J Manavis, AJ Hannan, BT Baune (2020) \emph{Effects of aging on the motor, cognitive and affective behaviors, neuroimmune responses and hippocampal gene expression} \textbf{Behavioural Brain Research} 383, 112501 \\[-3mm] 
+     \item K Barthelson, \textbf{SM Pederson}, M Newman, M Lardelli (2020) \emph{Brain transcriptome analysis reveals subtle effects on mitochondrial function and iron homeostasis of mutations in the SORL1 gene implicated in early onset familial Alzheimer's Disease} \textbf{Molecular Brain} 13 (1), 1-19 \\[-3mm] 
+     \item SK Sanyal, J Brugger, B Etschmann, \textbf{SM Pederson}, PWJ Delport, R Dixon, \emph{et al} (2020) \emph{Metal resistant bacteria on gold particles: Implications of how anthropogenic contaminants could affect natural gold biogeochemical cycling} \textbf{Science Of The Total Environment} 727, 138698 \\[-3mm] 
+     \item H Jiang, \textbf{SM Pederson}, M Newman, Y Dong, K Barthelson, M Lardelli (2020) \emph{Transcriptome analysis indicates dominant effects on ribosome and mitochondrial function of a premature termination codon mutation in the zebrafish gene psen2} \textbf{PLOS One} 15 (7), e0232559 \\[-3mm] 
+     \item N Liu, T Sadlon, YY Wong, \textbf{SM Pederson}, J Breen, SC Barry (2020) \emph{3DFAACTS-SNP: Using regulatory T cell-specific epigenomics data to uncover candidate mechanisms of Type-1 Diabetes (T1D) risk} \textbf{bioRxiv}  \\[-3mm] 
+     \item N Hin, M Newman, \textbf{SM Pederson}, MM Lardelli (2020) \emph{Iron Responsive Element (IRE)-mediated responses to iron dyshomeostasis in Alzheimer's disease} \textbf{bioRxiv}  \\[-3mm] 
+     \item K Barthelson, \textbf{SM Pederson}, M Newman, M Lardelli (2020) \emph{Brain Transcriptome Analysis of a Protein-Truncating Mutation in Sortilin-Related Receptor 1 Associated With Early-Onset Familial Alzheimer's Disease Indicates Early Effects on Mitochondrial and Ribosome Function} \textbf{Journal Of Alzheimer's Disease} 1-15 \\[-3mm] 
+     \item N Schwensow, \textbf{SM Pederson}, D Peacock, B Cooke, P Cassey (2020) \emph{Adaptive changes in the genomes of wild rabbits after 16 years of viral epidemics} \textbf{Molecular Ecology} 29 (19), 3777-3794 \\[-3mm] 
+     \item CY Brown, T Sadlon, CM Hope, YY Wong, S Wong, N Liu, H Withers, K Brown, V Bandara, B Gundsambuu, \textbf{SM Pederson}, J Breen, SA Robertson, A Forrest, M Beyer, SC Barry (2020) \emph{Molecular Insights Into Regulatory T-Cell Adaptation to Self, Environment, and Host Tissues: Plasticity or Loss of Function in Autoimmune Disease} \textbf{Frontiers In Immunology} 11, 1269 \\[-3mm] 
+     \item N Liu, WY Low, H Alinejad-Rokny, \textbf{SM Pederson}, T Sadlon, S Barry, \emph{et al} (2020) \emph{Seeing the forest through the trees: Identifying functional interactions from Hi-C} \textbf{bioRxiv}  \\[-3mm] 
+     \item K Barthelson, \textbf{SM Pederson}, M Newman, H Jiang, M Lardelli (2020) \emph{Frameshift and frame-preserving mutations in zebrafish presenilin 2 affect different cellular functions in young adult brains} \textbf{bioRxiv}  \\[-3mm] 
+     \item J Breen, D McAninch, T Jankovic-Karasoulos, D McCullough, MD Smith, KJ Bogias, Q Wan, A Choudhry, N Hin, \textbf{SM Pederson}, T Bianco-Miotto, CT Roberts (2020) \emph{Temporal placental genome wide expression profiles reflect three phases of utero-placental blood flow during early to mid human gestation} \textbf{medRxiv}  \\[-3mm] 
+     \item Y Dong, M Newman, \textbf{SM Pederson}, N Hin, M Lardelli (2020) \emph{Transcriptome analyses of 7-day-old zebrafish larvae possessing a familial Alzheimer's disease-like mutation in psen1 indicate effects on oxidative phosphorylation, mcm functions, and iron homeostasis} \textbf{bioRxiv}  \\[-3mm] 
+     \item PJ Fabres, N Sai, \textbf{SM Pederson}, F Zheng, J Breen, M Gilliham, PJ Tricker, \emph{et al} (2020) \emph{Dicistronic tRNA-mRNA transcripts in grapevine (Vitis vinifera) display distinct, regional expression patterns that correlate with tRNA expression} \textbf{bioRxiv}  \\[-3mm] 
+     \item M Newman, N Hin, \textbf{SM Pederson}, M Lardelli (2019) \emph{Brain transcriptome analysis of a familial Alzheimer's disease-like mutation in the zebrafish presenilin 1 gene implies effects on energy production} \textbf{Molecular Brain} 12 (1), 1-5 \\[-3mm] 
+     \item JA Morgan, G Singhal, F Corrigan, EJ Jaehne, MC Jawahar, J Breen, \textbf{SM Pederson}, BT Baune (2019) \emph{Ceasing exercise induces depression-like, anxiety-like, and impaired cognitive-like behaviours and altered hippocampal gene expression} \textbf{Brain Research Bulletin} 148, 118-130 \\[-3mm] 
+     \item CM Hope, J Welch, A Mohandas, \textbf{SM Pederson}, D Hill, B Gundsambuu, \emph{et al} (2019) \emph{Peptidase inhibitor 16 identifies a human regulatory T-cell subset with reduced FOXP3 expression over the first year of recent onset type 1 diabetes} \textbf{European Journal Of Immunology} 49 (8), 1235-1250 \\[-3mm] 
+     \item G Singhal, J Morgan, MC Jawahar, F Corrigan, EJ Jaehne, C Toben, J Breen, \textbf{SM Pederson}, AJ Hannan, BT Baune (2019) \emph{The effects of short-term and long-term environmental enrichment on locomotion, mood-like behavior, cognition and hippocampal gene expression} \textbf{Behavioural Brain Research} 368, 111917 \\[-3mm] 
+     \item G Singhal, J Morgan, MC Jawahar, F Corrigan, EJ Jaehne, C Toben, J Breen, \textbf{SM Pederson}, AJ Hannan, BT Baune (2019) \emph{Short-term environmental enrichment, and not physical exercise, alleviate cognitive decline and anxiety from middle age onwards without affecting hippocampal gene expression} \textbf{Cognitive, Affective, \& Behavioral Neuroscience} 19 (5), 1143-1169 \\[-3mm] 
+     \item Q Wan, SYL Leemaqz, \textbf{SM Pederson}, D McCullough, DC McAninch, \emph{et al} (2019) \emph{Quality control measures for placental sample purity in DNA methylation array analyses} \textbf{Placenta} 88, 8-11 \\[-3mm] 
+     \item TH To, \textbf{SM Pederson} (2019) \emph{strandCheckR: An R package for quantifying and removing double strand sequences for strand-specific RNA-seq} \textbf{The Journal Of Open Source Software} 4 (34), 1145 \\[-3mm] 
+     \item D Yang, AR Wijenayaka, LB Solomon, \textbf{SM Pederson}, DM Findlay, \emph{et al} (2018) \emph{Novel insights into Staphylococcus aureus deep bone infections: the involvement of osteocytes} \textbf{mBio} 9 (2) \\[-3mm] 
+     \item CC Homan, \textbf{SM Pederson}, TH To, C Tan, S Piltz, MA Corbett, E Wolvetang, \emph{et al} (2018) \emph{PCDH19 regulation of neural progenitor cell differentiation suggests asynchrony of neurogenesis as a mechanism contributing to PCDH19 Girls Clustering Epilepsy} \textbf{Neurobiology Of Disease} 116, 106-119 \\[-3mm] 
+     \item L Zeng, \textbf{SM Pederson}, RD Kortschak, DL Adelson (2018) \emph{Transposable elements and gene expression during the evolution of amniotes} \textbf{Mobile DNA} 9 (1), 1-9 \\[-3mm] 
+     \item T Sadlon, CY Brown, V Bandara, CM Hope, JE Schjenken, \textbf{SM Pederson}, J Breen, A Forrest, M Beyer, S Robertson, SC Barry (2018) \emph{Unravelling the molecular basis for regulatory T-cell plasticity and loss of function in disease} \textbf{Clinical \& Translational Immunology} 7 (2), e1011 \\[-3mm] 
+     \item CY Brown, S Dayan, SW Wong, A Kaczmarek, CM Hope, \textbf{SM Pederson}, \emph{et al} (2018) \emph{FOXP3 and miR-155 cooperate to control the invasive potential of human breast cancer cells by down regulating ZEB2 independently of ZEB1} \textbf{Oncotarget} 9 (45), 27708 \\[-3mm] 
+     \item GTJ Maung KZY, Leo PJ, Bassal M, Casolari DA, Gray JX, Bray SC, \textbf{Pederson SM} \emph{et al} (2018) \emph{Rare variants in Fanconi anemia genes are enriched in acute myeloid leukemia} \textbf{Blood Cancer Journal} 8 (6), 1-5 \\[-3mm] 
+     \item M Konate, MJ Wilkinson, BT Mayne, \textbf{SM Pederson}, ES Scott, B Berger, \emph{et al} (2018) \emph{Salt stress induces non-CG methylation in coding regions of barley seedlings (Hordeum vulgare)} \textbf{Epigenomes} 2 (2), 12 \\[-3mm] 
+     \item L Zeng, \textbf{SM Pederson}, D Cao, Z Qu, Z Hu, DL Adelson, C Wei (2018) \emph{Genome-Wide Analysis of the Association of Transposable Elements with Gene Regulation Suggests that Alu Elements Have the Largest Overall Regulatory Impact} \textbf{Journal Of Computational Biology} 25 (6), 551-562 \\[-3mm] 
+     \item A Tikhomirova, C Trappetti, AJ Standish, Y Zhou, J Breen, \textbf{SM Pederson}, \emph{et al} (2018) \emph{Specific growth conditions induce a Streptococcus pneumoniae non-mucoidal, small colony variant and determine the outcome of its co-culture with Haemophilus influenzae} \textbf{Pathogens And Disease} 76 (7), fty074 \\[-3mm] 
+     \item D Yang, AR Wijenayaka, LB Solomon, \textbf{SM Pederson}, DM Findlay, \emph{et al} (2018) \emph{Novel Insights into Staphylococcus aureus Deep Bone Infections: the Involvement of Osteocytes. mBio} \textbf{}  \\[-3mm] 
+     \item S Delacroix, RG Chokka, AJ Nelson, DT Wong, \textbf{SM Pederson}, J Nimmo, \emph{et al} (2018) \emph{Effects of renal sympathetic denervation on myocardial structure, function and perfusion: A serial CMR study} \textbf{Atherosclerosis} 272, 207-215 \\[-3mm] 
+     \item \textbf{SM Pederson} (2018) \emph{BMEA: Bayesian Modelling For Exon Array Data} \textbf{PhD Thesis}  \\[-3mm] 
+
+\end{enumerate}
+
+
+\end{document}
+
+%\clearpage\end{CJK*}                              % if you are typesetting your resume in Chinese using CJK; the \clearpage is required for fancyhdr to work correctly with CJK, though it kills the page numbering by making \lastpage undefined
+\end{document}
+
+
+%% end of file `template.tex'.

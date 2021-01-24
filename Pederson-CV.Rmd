@@ -1,0 +1,312 @@
+---
+name: "Stephen M"
+surname: "Pederson"
+position: "Post-Doctoral Bioinformatician"
+address: |
+  | Dame Roma Mitchell Cancer Research Laboratories
+  | Adelaide Medical School
+  | University of Adelaide
+  |
+phone: +61 4 1333 9618
+email: "stephen.pederson@adelaide.edu.au"
+www: "researchers.adelaide.edu.au/profile/stephen.pederson"
+github: steveped
+linkedin: "stephen-pederson-06ba4914"
+date: "`r format(Sys.time(), '%B %Y')`"
+output: 
+  vitae::moderncv:
+    keep_tex: true
+    theme: classic
+---
+
+<!-- Links not required in YAML. Keep here for future reference -->
+<!-- orcid: 0000-0001-8197-3303 -->
+<!-- twitter: StevePederson8 -->
+
+<!-- Line spacing from detailed_entries() is too much. Reset here -->
+\renewcommand*{\cventry}[7][-3mm]{%
+  \cvitem[#1]{#2}{%
+    {\bfseries#3}%
+    \ifthenelse{\equal{#4}{}}{}{, {\slshape#4}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\small#7\end{minipage}}\fi}}
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r packages}
+library(vitae)
+library(tidyverse)
+library(magrittr)
+library(scholar)
+library(lubridate)
+```
+
+
+```{r getPubs}
+sp <- "ZbO2KUEAAAAJ"
+pubsRaw <- get_publications(sp, flush = TRUE) %>%
+  as_tibble() %>%
+  mutate(
+    across(
+      .cols = c("title", "author", "journal"), 
+      .fns = stringi::stri_trans_general,
+      id = "latin-ascii"
+    )
+  )
+```
+
+```{r getIF}
+j <- unique(pubsRaw$journal) %>%
+  .[. != ""] %>%
+  str_subset("xiv$", negate = TRUE) %>%
+  str_subset("Patent", negate = TRUE)
+imp <- get_impactfactor(j) %>%
+  mutate(
+    j = j,
+    ImpactFactor = case_when(
+      # All taken from https://academic-accelerator.com/Impact-Factor-IF
+      j %in% c("Plutella", "The Journal of Open Source Software") ~ NA_real_,
+      j == "Oncotarget" ~ 3.71,
+      j == "Epigenomes" ~ 3.83,
+      j == "The Journal of Immunology" ~ 4.34,
+      j == "Clinical & Translational Immunology" ~ 9.18,
+      j == "International Journal of Nephrology and Renovascular Disease" ~ 2.59,
+      !is.na(ImpactFactor) ~ ImpactFactor
+    )
+  )
+pubsRaw %<>%
+  left_join(
+    dplyr::select(imp, journal = j, ImpactFactor),
+    by = "journal"
+  )
+```
+
+```{r shorten_full_authors}
+shorten_full_authors <- function(x){
+  x <- iconv(x, "latin1", "ASCII", "n")
+  x <- stringi::stri_trans_general(x, id = "latin-ascii")
+  x <- str_split(x, pattern = ",")
+  x <- lapply(x, str_replace_all, pattern = "[a-z]+ ", replacement = " ")
+  x <- lapply(x, str_trim)
+  x <- lapply(x, str_replace_all, pattern = "([A-Z]) ([A-Z]) (.+)", replacement = "\\1\\2 \\3")
+  vapply(x, str_flatten, character(1), collapse = ", ")
+}
+```
+
+```{r replace_short, results='hide'}
+needsFull <- !str_detect(pubsRaw$author, "Pederson")
+full <- get_complete_authors(sp, pubsRaw$pubid[needsFull], initials = FALSE)
+pubsRaw$author[needsFull] <- shorten_full_authors(full)
+pubsRaw$author <- str_replace_all(pubsRaw$author, "(SC B )(T Sadlon.+)", "\\2, SC Barry")
+```
+
+
+```{r pred_h}
+pred_h <- predict_h_index(sp)
+```
+
+```{r finalPubs}
+pubs <- pubsRaw %>%
+  dplyr::filter(
+    # cites > 1 | year == "2020", #year(today()),
+    !str_detect(journal, "(Patent|EUROPEAN|REPRODUCTIVE|Wiley)")
+  ) %>%
+  mutate(
+    author = str_replace_all(author, "\\.\\.\\.", "\\\\emph{et al}"),
+    author = str_replace_all(author, " &", " \\&"),
+    title = str_replace_all(title, " &", " \\&"),
+    title = case_when(
+      title == "Brain Transcriptome Analysis of a Protein-Truncating Mutation in Sortilin-Related Receptor 1 Associated With Early-Onset Familial Alzheimer's Disease Indicates Early Effects on ..." ~ str_replace(title, "\\.{3}", "Mitochondrial and Ribosome Function"),
+      title == "Brain transcriptome analysis reveals subtle effects on mitochondrial function and iron homeostasis of mutations in the SORL1 gene implicated in early onset familial Alzheimer's ..." ~ str_replace(title, "\\.{3}", "Disease"),
+      title == "Transcriptome analyses of 7-day-old zebrafish larvae possessing a familial Alzheimer's disease-like mutation in psen1 indicate effects on oxidative phosphorylation, mcm ..." ~ str_replace(title, "\\.{3}", "functions, and iron homeostasis"),
+      TRUE ~ title
+    ),
+    journal = str_replace_all(journal, " &", " \\\\&"),
+    journal = str_to_title(journal),
+    journal = str_replace_all(journal, "^Bmc", "BMC"),
+    journal = str_replace_all(journal, "^Plos", "PLOS"),
+    journal = str_replace_all(journal, "^Mbio", "mBio"),
+    journal = str_replace_all(journal, "Dna$", "DNA"),
+    journal = str_replace_all(journal, "Biorxiv", "bioRxiv"),
+    journal = str_replace_all(journal, "Medrxiv", "medRxiv"),
+    journal = case_when(
+      grepl("BMEA", title) ~ "PhD Thesis",
+      !grepl("BMEA", title) ~ journal
+    )
+  ) 
+wif <- weighted.mean(pubs$ImpactFactor, pubs$cites, na.rm = TRUE)
+```
+
+
+
+```{r pub2Tex}
+pub2Tex <- function(x){
+  paste(
+    "\t",
+    "\\item",
+    str_replace_all(x$author, "SM* Pederson", "\\\\textbf{SM Pederson}") %>%
+      str_replace_all("Pederson SM*", "\\\\textbf{Pederson SM}"),
+      # str_replace_all("‐", "-"),
+    paste0("(", x$year, ")"),
+    paste0(
+      "\\emph{", x$title, "}"
+    ),
+    paste0(
+      "\\textbf{", x$journal, "}"
+    ),
+    x$number,
+    # paste0(
+    #   "(\\emph{",
+    #   x$cites,
+    #   " citations})"
+    # ),
+    "\\\\[-3mm]",
+    "\n"
+  ) 
+}
+```
+
+
+# Profile
+
+ * Whilst training in the context of the immune dysregulation of T cells, a keen interest of mine is *Transcriptomics and Gene Regulatory Networks*. As part of my PhD (2018), I developed a novel, Bayesian statistical methodology for the analysis of Whole Transcript Microarray data, focussing on the detection of alternate isoform usage. As a consequence, a potential role for ncRNA in the activation of T cells was revealed for the first time.
+ * As the inaugural co-ordinator of the Bioinformatics Hub at the University of Adelaide (2014-2020), *I oversaw the growth of this facility from a sole employee in 2014 to 4.0FTE staff in core positions by 2020*, along with a further 12 contract and casual staff. 
+ <!-- Collectively, our team were named investigators on $8.5m in research funding. -->
+ * Bioinformatics education and training have always been an important interest. Locally *I have delivered bioinformatics training workshops to over 1500 staff and students*, as well as delivering training workshops at national training events. From the years 2016-2018, I ran the *largest training event in the language `R` held in Australia*, attracting attendees from around Australia. I have also run corporate R training for both Sugar Research Australia (QLD) and SARDI
+ * I played an active role in the *establishment of an Undergraduate Major in Bioinformatics* (B.Sc), acting as Course Convenor for Transcriptomics Applications III in 2020, writing and delivering nearly all lecture and practical material. 
+ * I am an enthusiastic supporter of open source software and am the senior author/developer of *two Bioconductor packages*. From 2016-2019, I played an active role in establishing the international event BiocAsia, bringing the training and networking opportunities of the Bioconductor community to our local region. 
+ <!-- * Having published `r nrow(dplyr::filter(pubs, !str_detect(journal, "iv$")))` peer-reviewed papers, the average Impact Factor across all my accepted publications is currently `r round(wif, 2)` with over 500 citations. Despite being an ECR of 2 years, I have an *h-index* of `r pred_h$h_index[1]`. -->
+ * Prior to bioinformatics, I was a professional musician and remain active in the local arts community, having performed at WOMADelaide four times
+
+\small
+
+# Employment History
+
+```{r}
+tribble(
+  ~Start, ~End, ~Org, ~Role,
+  1992, 2008, "", "Self-Employed Musician",
+  2011, 2014, "School of Mathematical Sciences, University of Adelaide", "Casual Tutor",
+  2014, 2020, "Bioinformatics Hub, University of Adelaide", "Co-ordinator",
+  2020, NA_real_, "Dame Roma Mitchell Cancer Research Laboratories, Univerrsity of Adelaide", "Post-Doctoral Bioinformatician",
+) %>% 
+  arrange(desc(Start)) %>%
+  mutate(
+    Year = case_when(
+      Start == End ~ as.character(Start),
+      is.na(End) ~ paste0(Start,"-"),
+      Start != End ~ paste(Start, End, sep = "-")
+    ),
+    Loc = "Adelaide, South Australia"
+  ) %>%
+  detailed_entries(
+    Role, Year, Org, where = Loc
+  )
+```
+
+
+# Education
+
+```{r}
+tribble(
+  ~ Degree, ~ Year, ~ Institution, ~ Where,
+  "Bachelor of Music", "1989-1991", "University of Adelaide", "South Australia, Australia",
+  "Bachelor of Science", "2002-2005", "University of Adelaide", "South Australia, Australia",
+  "Bachelor of Mathematics & Comp. Sc. (Hons)", "2006-2007", "University of Adelaide", "South Australia, Australia",
+  "Doctor of Philosophy (Medicine)", "2008-2018", "University of Adelaide", "South Australia, Australia"
+) %>% 
+  arrange(desc(Year)) %>%
+  detailed_entries(Degree, Year, Institution, Where)
+```
+
+
+# Presentations
+
+```{r}
+tribble(
+  ~Year, ~Event, ~Location, ~Title, 
+  2019, "Bioconductor", "New York, NY", "Short Talk & Poster - ngsReports and strandCheckR: Two new packages for quality control of NGS data",
+  2019, "BiocAsia/BioinfoSummer", "Sydney", "Short Talk - Experiences of a First-Time Package Submitter",
+  2017, "BioinfoSummer", "Adelaide", "Training Workshop - Data Visualisation in R",
+  2016, "ABACBS", "Brisbane", "Poster - Use of a weighted bootstrap for indentifying the regulatory role of genomic repeat elements",
+  2015, "NCBI", "Bethesda, MD", "Presentation - Bioinformatics from Down Under",
+  2015, "BioinfoSummer", "Sydney", "Training Workshop - Introduction to R"
+) %>%
+  arrange(desc(Year)) %>%
+  detailed_entries(
+    Event,
+    Year,
+    Location,
+    Title
+  )
+```
+
+
+# Community Engagement
+
+```{r}
+tribble(
+  ~Start, ~End, ~Org, ~Role,
+  2018, 2021, "Australian Bioinformatics And Computational Biology Society", "Ordinary Member",
+  2016, 2019, "Bioconductor", "BiocAsia Conference Committee",
+  2017, 2017, "Australian Bioinformatics And Computational Biology Society", "Conference Committee",
+  2016, 2016, "Australian Mathematical Sciences Institute", "BioinfoSummer Conference Committee",
+  2014, 2016, "Australasian Genomics Technologies Association", "Ordinary Member",
+  2014, 2015, "International Society for Computational Biology", "Ordinary Member"
+) %>% 
+  arrange(desc(End)) %>%
+  mutate(
+    Year = case_when(
+      Start == End ~ as.character(Start),
+      Start != End ~ paste(Start, End, sep = "-")
+    )
+  ) %>%
+  brief_entries(
+    Role,
+    Year, 
+    Org
+  )
+```
+
+# Technical Skills
+
+ * Highly fluent in the language `R` and using High-Performance Computing systems, along with `snakemake` for pipeline management
+ * Experienced with `linux` (Ubuntu), `bash`, `Git` for version control, `markdown` and \LaTeX
+ * A working familiarity with `python` and `C/C++`
+ * Expertise in RNA-Seq, scRNA-Seq, ChIP-Seq, RAD/GBS-Seq, HiC-Seq and microarray data
+
+
+# Publications Since 2018
+
+\begin{enumerate}
+  \small
+```{r, results='asis'}
+printPubs <- pubs %>%
+  arrange(desc(year)) %>%
+  dplyr::filter(year >= 2018) %>%
+  split( f = seq_len(nrow(.))) %>%
+  lapply(pub2Tex)
+for (i in seq_along(printPubs)) cat(printPubs[[i]])
+```
+
+\end{enumerate}
+
+```{r, eval=FALSE}
+# Just doesn't look as nice as my manual version
+bibliography_entries("scholar.bib") %>%
+  arrange(issued, desc(author$family)) %>%
+  dplyr::filter(
+    !is.na(`container-title`),
+    !str_detect(`container-title`, "EUROPEAN"),
+    !type %in% c("no-type", "paper-conference")
+  )
+```
+
