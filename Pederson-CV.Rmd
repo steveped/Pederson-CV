@@ -12,6 +12,8 @@ email: "stephen.pederson@adelaide.edu.au"
 www: "researchers.adelaide.edu.au/profile/stephen.pederson"
 github: steveped
 linkedin: "stephen-pederson-06ba4914"
+#orcid: 0000-0001-8197-3303
+#twitter: StevePederson8
 date: "`r format(Sys.time(), '%B %Y')`"
 output: 
   vitae::moderncv:
@@ -19,12 +21,8 @@ output:
     theme: classic
 ---
 
-<!-- Links not required in YAML. Keep here for future reference -->
-<!-- orcid: 0000-0001-8197-3303 -->
-<!-- twitter: StevePederson8 -->
-
 <!-- Line spacing from detailed_entries() is too much. Reset here -->
-\renewcommand*{\cventry}[7][-3mm]{%
+\renewcommand*{\cventry}[7][-3.5mm]{%
   \cvitem[#1]{#2}{%
     {\bfseries#3}%
     \ifthenelse{\equal{#4}{}}{}{, {\slshape#4}}%
@@ -33,8 +31,6 @@ output:
     .\strut%
     \ifx&#7&%
     \else{\newline{}\begin{minipage}[t]{\linewidth}\small#7\end{minipage}}\fi}}
-
-
 
 
 ```{r setup, include=FALSE}
@@ -47,6 +43,7 @@ library(tidyverse)
 library(magrittr)
 library(scholar)
 library(lubridate)
+library(scales)
 ```
 
 
@@ -60,6 +57,9 @@ pubsRaw <- get_publications(sp, flush = TRUE) %>%
       .fns = stringi::stri_trans_general,
       id = "latin-ascii"
     )
+  ) %>%
+  dplyr::filter(
+    !str_detect(title, "BMEA")
   )
 ```
 
@@ -102,10 +102,21 @@ shorten_full_authors <- function(x){
 ```
 
 ```{r replace_short, results='hide'}
-needsFull <- !str_detect(pubsRaw$author, "Pederson")
+# needsFull <- !str_detect(pubsRaw$author, "Pederson")
+# Can't be more than 50
+needsFull <- str_detect(pubsRaw$author, "\\.{3}$")
 full <- get_complete_authors(sp, pubsRaw$pubid[needsFull], initials = FALSE)
 pubsRaw$author[needsFull] <- shorten_full_authors(full)
+## Correct the weird ones
 pubsRaw$author <- str_replace_all(pubsRaw$author, "(SC B )(T Sadlon.+)", "\\2, SC Barry")
+pubsRaw$author[str_detect(pubsRaw$author, "RJ$")] <- full %>%
+  str_subset("Gonda") %>% 
+  str_replace("Gonda TJ", "Gonda TJ,") %>% 
+  str_split(pattern = ",") %>% 
+  .[[1]] %>% 
+  str_trim() %>% 
+  str_replace_all("(.+) (.+)", "\\2 \\1") %>% 
+  str_flatten(collapse = ", ")
 ```
 
 
@@ -142,16 +153,61 @@ pubs <- pubsRaw %>%
       !grepl("BMEA", title) ~ journal
     )
   ) 
+fl <- pubs %>%
+  dplyr::filter(
+    str_detect(author, "Pederson$") |
+      str_detect(title, "Transposable elements .+ evolution of amniotes")
+    ) %>%
+  pull(pubid)
 wif <- weighted.mean(pubs$ImpactFactor, pubs$cites, na.rm = TRUE)
 ```
 
+```{r}
+q1 <- c(
+  "Atherosclerosis",
+  "Bioinformatics",
+  "Blood Cancer Journal",
+  "Clinical \\& Translational Immunology",
+  "Frontiers In Immunology",
+  "Journal Of Experimental Medicine",
+  "mBio",
+  "Molecular Brain",
+  "Molecular Ecology",
+  "Neurobiology Of Disease",
+  "Oncogene",
+  "Placenta",
+  "Science Of The Total Environment",
+  "Scientific Reports"
+)
+q2 <- c(
+ "Behavioural Brain Research",
+ "Brain Research Bulletin",
+ "European Journal Of Immunology",
+ "Immunology And Cell Biology",
+ "Journal Of Alzheimer's Disease",
+ "Mobile DNA",
+ "PLOS One",
+ "The Journal Of Immunology"
+) %>%
+  setdiff(q1)
+q_perc <- pubs %>%
+  dplyr::filter(
+    !str_detect(journal, "xiv$") # Currently in review
+  ) %>%
+  summarise(
+    q1 = mean(journal %in% q1),
+    q2 = mean(journal %in% q2)
+  )
+```
 
 
 ```{r pub2Tex}
-pub2Tex <- function(x){
+pub2Tex <- function(x, .fl = fl){
+  lab <- ifelse(x$pubid %in% .fl, "\\moditem{*}", "\\item")
   paste(
     "\t",
-    "\\item",
+    lab,
+    # "\\item",
     str_replace_all(x$author, "SM* Pederson", "\\\\textbf{SM Pederson}") %>%
       str_replace_all("Pederson SM*", "\\\\textbf{Pederson SM}"),
       # str_replace_all("‐", "-"),
@@ -168,7 +224,7 @@ pub2Tex <- function(x){
     #   x$cites,
     #   " citations})"
     # ),
-    "\\\\[-3mm]",
+    "\\\\[-4mm]",
     "\n"
   ) 
 }
@@ -178,13 +234,14 @@ pub2Tex <- function(x){
 # Profile
 
  * A keen interest of mine is *Transcriptomics and Gene Regulatory Networks*. As part of my PhD (2018), whilst training in the context of the immune dysregulation of T cells, I developed a novel, Bayesian statistical methodology for the analysis of Whole Transcript Microarray data, focussing on the detection of alternate isoform usage. As a consequence, a potential role for ncRNA in the activation of T cells was revealed for the first time.
- * As the inaugural co-ordinator of the Bioinformatics Hub at the University of Adelaide (2014-2020), *I oversaw the growth of this facility from a sole employee in 2014 to 4.0FTE staff in core positions by 2020*, along with a further 12 contract and casual staff. 
- <!-- Collectively, our team were named investigators on $8.5m in research funding. -->
- * Bioinformatics education and training have always been an important interest. Locally *I have delivered bioinformatics training workshops to over 1500 staff and students*, as well as delivering training workshops at national training events. From the years 2016-2018, I ran the *largest training event in the language `R` held in Australia*, attracting attendees from around Australia. I have also run corporate R training for both Sugar Research Australia (QLD) and SARDI
+ * As the inaugural co-ordinator of the Bioinformatics Hub at the University of Adelaide (2014-2020), *I oversaw the growth of this facility from a sole employee in 2014 to 4 full-time core staff by 2020*, along with a further 12 contract and casual staff. Collectively, our team were named investigators on $8.5m in research funding across all Faculties, and gaining experience in a diversity of high-throughput data types.
+ * Bioinformatics education and training have always been an important interest. 
+ In 2015 I attended the *Master R Developer Workshop* with Dr Hadley Wickham (RStudio).
+ Locally *I have delivered bioinformatics training workshops to over 1500 staff and students*, as well as delivering training  at national events. From the years 2016-2018, I ran the *largest training event in the language `R` held in Australia*, attracting attendees from around the country, and have also run corporate R training for both Sugar Research Australia (QLD) and SARDI
  * I played an active role in the *establishment of an Undergraduate Major in Bioinformatics* (B.Sc), acting as Course Convenor for Transcriptomics Applications III in 2020, writing and delivering nearly all lecture and practical material. 
  * I am an enthusiastic supporter of open source software and am the senior author/developer of *two Bioconductor packages*. From 2016-2019, I played an active role in establishing the international event BiocAsia, bringing the training and networking opportunities of the Bioconductor community to our local region. 
  <!-- * Having published `r nrow(dplyr::filter(pubs, !str_detect(journal, "iv$")))` peer-reviewed papers, the average Impact Factor across all my accepted publications is currently `r round(wif, 2)` with over 500 citations. Despite being an ECR of 2 years, I have an *h-index* of `r pred_h$h_index[1]`. -->
- * Prior to bioinformatics, I was a professional musician and remain active in the local arts community, having performed at WOMADelaide four times since 2006
+ <!-- * In addition to bioinformatics, I am active in the local music community, being a Musical Director for Adelaide Cabaret Festival (Brenta's Bad Thing, 2014), and making multiple appearances at both the Adelaide Guitar Festival and WOMADelaide. -->
 
 \small
 
@@ -193,7 +250,7 @@ pub2Tex <- function(x){
 ```{r}
 tribble(
   ~Start, ~End, ~Org, ~Role,
-  1992, 2008, "", "Self-Employed Musician",
+  1992, 2014, "", "Self-Employed Musician",
   2011, 2014, "School of Mathematical Sciences, University of Adelaide", "Casual Tutor",
   2014, 2020, "Bioinformatics Hub, University of Adelaide", "Co-ordinator",
   2020, NA_real_, "Dame Roma Mitchell Cancer Research Laboratories, Univerrsity of Adelaide", "Post-Doctoral Bioinformatician",
@@ -278,26 +335,34 @@ tribble(
 
 # Technical Skills
 
- * Highly fluent in the language `R` and using High-Performance Computing systems, along with `snakemake` for pipeline management
- * Experienced with `linux` (Ubuntu), `bash`, `Git` for version control, `markdown` and \LaTeX
+ * Highly fluent in the language `R` and using High-Performance Computing systems
+ * Experienced with `linux` (Ubuntu), `bash`, `Git` for version control, `markdown` and \LaTeX, along with `snakemake` for HPC pipeline management
+ * Expertise in statistics, RNA-Seq, scRNA-Seq, ChIP-Seq, RAD/GBS-Seq, HiC-Seq and microarray data
  * A working familiarity with `python` and `C/C++`
- * Expertise in RNA-Seq, scRNA-Seq, ChIP-Seq, RAD/GBS-Seq, HiC-Seq and microarray data
+
+```{r yr}
+yr <- 2018
+```
 
 
-# Publications Since 2018
+# Publications Since `r yr` (`r nrow(pubs)` in total since `r min(pubs$year)`)
 
-\begin{enumerate}
+`r pubs %>% dplyr::filter(year >= yr, !str_detect(journal, "xiv$")) %>% summarise(q1 = mean(journal %in% q1)) %>% pull("q1") %>% percent()` of the below are in Q1 journals. First or senior author publications are indicated with an asterisk.  
+
+\vspace{4mm}
+
+\begin{modenumerate}
   \small
 ```{r, results='asis'}
 printPubs <- pubs %>%
   arrange(desc(year)) %>%
-  dplyr::filter(year >= 2018) %>%
-  split( f = seq_len(nrow(.))) %>%
+  dplyr::filter(year >= yr) %>%
+  split(f = seq_len(nrow(.))) %>%
   lapply(pub2Tex)
 for (i in seq_along(printPubs)) cat(printPubs[[i]])
 ```
 
-\end{enumerate}
+\end{modenumerate}
 
 ```{r, eval=FALSE}
 # Just doesn't look as nice as my manual version
