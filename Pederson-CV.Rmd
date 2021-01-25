@@ -127,19 +127,23 @@ pred_h <- predict_h_index(sp)
 ```{r finalPubs}
 pubs <- pubsRaw %>%
   dplyr::filter(
-    # cites > 1 | year == "2020", #year(today()),
+    # cites > 1 | year == year(today()),
     !str_detect(journal, "(Patent|EUROPEAN|REPRODUCTIVE|Wiley)")
   ) %>%
   mutate(
-    author = str_replace_all(author, "\\.\\.\\.", "\\\\emph{et al}"),
+    
     author = str_replace_all(author, " &", " \\&"),
     title = str_replace_all(title, " &", " \\&"),
+
+    ## Correct the titles where scholar has inserted ...
     title = case_when(
       title == "Brain Transcriptome Analysis of a Protein-Truncating Mutation in Sortilin-Related Receptor 1 Associated With Early-Onset Familial Alzheimer's Disease Indicates Early Effects on ..." ~ str_replace(title, "\\.{3}", "Mitochondrial and Ribosome Function"),
       title == "Brain transcriptome analysis reveals subtle effects on mitochondrial function and iron homeostasis of mutations in the SORL1 gene implicated in early onset familial Alzheimer's ..." ~ str_replace(title, "\\.{3}", "Disease"),
       title == "Transcriptome analyses of 7-day-old zebrafish larvae possessing a familial Alzheimer's disease-like mutation in psen1 indicate effects on oxidative phosphorylation, mcm ..." ~ str_replace(title, "\\.{3}", "functions, and iron homeostasis"),
       TRUE ~ title
     ),
+    
+    ## Tidy up the journal names
     journal = str_replace_all(journal, " &", " \\\\&"),
     journal = str_to_title(journal),
     journal = str_replace_all(journal, "^Bmc", "BMC"),
@@ -152,7 +156,9 @@ pubs <- pubsRaw %>%
       grepl("BMEA", title) ~ "PhD Thesis",
       !grepl("BMEA", title) ~ journal
     )
+    
   ) 
+## Get the first/last author pubs
 fl <- pubs %>%
   dplyr::filter(
     str_detect(author, "Pederson$") |
@@ -190,6 +196,7 @@ q2 <- c(
  "The Journal Of Immunology"
 ) %>%
   setdiff(q1)
+# Have a quick squiz
 q_perc <- pubs %>%
   dplyr::filter(
     !str_detect(journal, "xiv$") # Currently in review
@@ -201,47 +208,17 @@ q_perc <- pubs %>%
 ```
 
 
-```{r pub2Tex}
-pub2Tex <- function(x, .fl = fl){
-  lab <- ifelse(x$pubid %in% .fl, "\\moditem{*}", "\\item")
-  paste(
-    "\t",
-    lab,
-    # "\\item",
-    str_replace_all(x$author, "SM* Pederson", "\\\\textbf{SM Pederson}") %>%
-      str_replace_all("Pederson SM*", "\\\\textbf{Pederson SM}"),
-      # str_replace_all("‐", "-"),
-    paste0("(", x$year, ")"),
-    paste0(
-      "\\emph{", x$title, "}"
-    ),
-    paste0(
-      "\\textbf{", x$journal, "}"
-    ),
-    x$number,
-    # paste0(
-    #   "(\\emph{",
-    #   x$cites,
-    #   " citations})"
-    # ),
-    "\\\\[-4mm]",
-    "\n"
-  ) 
-}
-```
-
-
 # Profile
 
  * A keen interest of mine is *Transcriptomics and Gene Regulatory Networks*. As part of my PhD (2018), whilst training in the context of the immune dysregulation of T cells, I developed a novel, Bayesian statistical methodology for the analysis of Whole Transcript Microarray data, focussing on the detection of alternate isoform usage. As a consequence, a potential role for ncRNA in the activation of T cells was revealed for the first time.
- * As the inaugural co-ordinator of the Bioinformatics Hub at the University of Adelaide (2014-2020), *I oversaw the growth of this facility from a sole employee in 2014 to 4 full-time core staff by 2020*, along with a further 12 contract and casual staff. Collectively, our team were named investigators on $8.5m in research funding across all Faculties, and gaining experience in a diversity of high-throughput data types.
+ * As the inaugural co-ordinator of the Bioinformatics Hub at the University of Adelaide (2014-2020), *I oversaw the growth of this facility from a sole employee in 2014 to 4 full-time core staff by 2020*, along with a further 12 contract and casual staff. Collectively, our team were named investigators on $8.5m in research funding across all Faculties, and I gained considerable experience in a broad range of high-throughput data types.
  * Bioinformatics education and training have always been an important interest. 
  In 2015 I attended the *Master R Developer Workshop* with Dr Hadley Wickham (RStudio).
- Locally *I have delivered bioinformatics training workshops to over 1500 staff and students*, as well as delivering training  at national events. From the years 2016-2018, I ran the *largest training event in the language `R` held in Australia*, attracting attendees from around the country, and have also run corporate R training for both Sugar Research Australia (QLD) and SARDI
+ Locally *I have delivered bioinformatics training workshops to over 1500 staff and students*, as well as delivering training  at national events. From the years 2016-2018, I ran the *largest training event in the language R held in Australia*, attracting attendees from around the country, and have also run corporate R training for both Sugar Research Australia (QLD) and SARDI
  * I played an active role in the *establishment of an Undergraduate Major in Bioinformatics* (B.Sc), acting as Course Convenor for Transcriptomics Applications III in 2020, writing and delivering nearly all lecture and practical material. 
- * I am an enthusiastic supporter of open source software and am the senior author/developer of *two Bioconductor packages*. From 2016-2019, I played an active role in establishing the international event BiocAsia, bringing the training and networking opportunities of the Bioconductor community to our local region. 
- <!-- * Having published `r nrow(dplyr::filter(pubs, !str_detect(journal, "iv$")))` peer-reviewed papers, the average Impact Factor across all my accepted publications is currently `r round(wif, 2)` with over 500 citations. Despite being an ECR of 2 years, I have an *h-index* of `r pred_h$h_index[1]`. -->
- <!-- * In addition to bioinformatics, I am active in the local music community, being a Musical Director for Adelaide Cabaret Festival (Brenta's Bad Thing, 2014), and making multiple appearances at both the Adelaide Guitar Festival and WOMADelaide. -->
+ * I am an enthusiastic supporter of open source software and am the senior author/developer of *two Bioconductor packages*. From 2016-2019, I played a key leadership role in establishing the international event *BiocAsia*, bringing the training and networking opportunities of the Bioconductor community to our local region. 
+ <!-- * Having published `r nrow(dplyr::filter(pubs, !str_detect(journal, "iv$")))` peer-reviewed papers, the average Impact Factor across all my accepted publications is currently `r round(wif, 2)` with over 500 citations in total and an *h-index* of `r pred_h$h_index[1]`. -->
+ <!-- * In addition, I am active in the local music community, being a Musical Director for Adelaide Cabaret Festival (Brenta's Bad Thing, 2014), and making multiple appearances at both the Adelaide Guitar Festival and WOMADelaide. -->
 
 \small
 
@@ -347,10 +324,42 @@ yr <- 2018
 
 # Publications Since `r yr` (`r nrow(pubs)` in total since `r min(pubs$year)`)
 
-`r pubs %>% dplyr::filter(year >= yr, !str_detect(journal, "xiv$")) %>% summarise(q1 = mean(journal %in% q1)) %>% pull("q1") %>% percent()` of the below are in Q1 journals. First or senior author publications are indicated with an asterisk.  
+```{r pub2Tex}
+pub2Tex <- function(x, .fl = fl){
+  lab <- ifelse(x$pubid %in% .fl, "\\moditem{*}", "\\item") ## Add asterisks to first/last author
+  paste(
+    "\t",
+    lab,
+    str_replace_all(x$author, "SM* Pederson", "\\\\textbf{SM Pederson}") %>%
+      str_replace_all("Pederson SM*", "\\\\textbf{Pederson SM}"),
+      # str_replace_all("‐", "-"),
+    paste0("(", x$year, ")"),
+    paste0(
+      "\\emph{", x$title, "}"
+    ),
+    paste0(
+      "\\textbf{", x$journal, "}"
+    ),
+    x$number,
+    ## If needing citations, uncomment these lines
+    # paste0(
+    #   "(\\emph{",
+    #   x$cites,
+    #   " citations})"
+    # ),
+    "\\\\[-4mm]",
+    "\n"
+  ) 
+}
+```
+
+
+<!-- `r pubs %>% dplyr::filter(year >= yr, !str_detect(journal, "xiv$")) %>% summarise(q1 = mean(journal %in% q1)) %>% pull("q1") %>% percent()` of the below are in Q1 journals.  -->
+First or senior author publications are indicated with an asterisk. My *h*-index is currently `r pred_h$h_index[1]`. 
 
 \vspace{4mm}
 
+<!-- The modenumerate environment is defined at the end of moderncv.cls -->
 \begin{modenumerate}
   \small
 ```{r, results='asis'}
