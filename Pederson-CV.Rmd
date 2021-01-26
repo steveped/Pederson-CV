@@ -322,7 +322,7 @@ yr <- 2018
 ```
 
 
-# Publications Since `r yr` (`r nrow(pubs)` in total since `r min(pubs$year)`)
+# Publications Since `r yr` 
 
 ```{r pub2Tex}
 pub2Tex <- function(x, .fl = fl){
@@ -355,6 +355,7 @@ pub2Tex <- function(x, .fl = fl){
 
 
 <!-- `r pubs %>% dplyr::filter(year >= yr, !str_detect(journal, "xiv$")) %>% summarise(q1 = mean(journal %in% q1)) %>% pull("q1") %>% percent()` of the below are in Q1 journals.  -->
+`r sum(pubs$year >= yr)` since `r yr`, `r nrow(pubs)` in total. 
 First or senior author publications are indicated with an asterisk. My *h*-index is currently `r pred_h$h_index[1]`. 
 
 \vspace{4mm}
